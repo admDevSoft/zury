@@ -354,16 +354,21 @@ section img.foto-animada.visible {
   transform: scale(1) translateY(0);
 }
 
-/* ZOOM LENTO DESPUÉS DE APARECER */
+/* ZOOM SUAVE: SE ACERCA Y REGRESA */
 .fotoBox img.visible,
 .fotoS img.visible,
 section img.foto-animada.visible {
-  animation: zoomSuave 9s ease-in-out 1s both;
+  animation: zoomSuave 6s ease-in-out 1s infinite;
 }
 
 @keyframes zoomSuave {
-  from { transform: scale(1); }
-  to { transform: scale(1.10); }
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.10);
+  }
 }
 
 /* RESPETAR A QUIEN PREFIERE MENOS MOVIMIENTO */
