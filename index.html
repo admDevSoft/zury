@@ -327,7 +327,10 @@ input,select,button,textarea{font-variant-numeric:inherit;font-feature-settings:
 
 
 /* ANIMACIONES DE FOTOGRAFÍAS */
-.fotoBox,
+.fotoBox {
+  overflow: visible;
+}
+
 .fotoS img,
 section img.foto-animada {
   overflow: hidden;
@@ -337,7 +340,7 @@ section img.foto-animada {
 .fotoS img,
 section img.foto-animada {
   opacity: 0;
-  transform: scale(1.04) translateY(18px);
+  transform: translateY(18px);
   transition:
     opacity 1.1s ease,
     transform 1.5s cubic-bezier(.2,.7,.2,1);
@@ -360,7 +363,7 @@ section img.foto-animada.visible {
 
 @keyframes zoomSuave {
   from { transform: scale(1); }
-  to { transform: scale(1.045); }
+  to { transform: scale(1.025); }
 }
 
 /* RESPETAR A QUIEN PREFIERE MENOS MOVIMIENTO */
