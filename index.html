@@ -324,6 +324,57 @@ input,select,button,textarea{font-variant-numeric:inherit;font-feature-settings:
   margin-top:20px;
 }  
 
+
+/* ANIMACIONES DE FOTOGRAFÍAS */
+.fotoBox,
+.fotoS img,
+section img.foto-animada {
+  overflow: hidden;
+}
+
+.fotoBox img,
+.fotoS img,
+section img.foto-animada {
+  opacity: 0;
+  transform: scale(1.04) translateY(18px);
+  transition:
+    opacity 1.1s ease,
+    transform 1.5s cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+
+.fotoBox img.visible,
+.fotoS img.visible,
+section img.foto-animada.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* ZOOM LENTO DESPUÉS DE APARECER */
+.fotoBox img.visible,
+.fotoS img.visible,
+section img.foto-animada.visible {
+  animation: zoomSuave 7s ease-in-out 1s both;
+}
+
+@keyframes zoomSuave {
+  from { transform: scale(1); }
+  to { transform: scale(1.045); }
+}
+
+/* RESPETAR A QUIEN PREFIERE MENOS MOVIMIENTO */
+@media (prefers-reduced-motion: reduce) {
+  .fotoBox img,
+  .fotoS img,
+  section img.foto-animada {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+}
+
+
 </style>
 <script>function fb(i){var l=(i.dataset.alt||"").split("|").filter(Boolean),n=l.shift();if(n){i.dataset.alt=l.join("|");i.src=n}else{i.onerror=null;(i.closest(".fotoBox")||i).style.display="none"}}</script>
 </head>
@@ -758,6 +809,30 @@ document.getElementById("form").addEventListener("submit", e => {
 });
 
 document.getElementById("bNo").addEventListener("click", () => enviar(false));
+
+/* ANIMACIÓN DE FOTOGRAFÍAS AL DESLIZAR */
+document.addEventListener("DOMContentLoaded", () => {
+  const fotos = document.querySelectorAll(
+    ".fotoBox img, .fotoS img, section img.foto-animada"
+  );
+
+  if ("IntersectionObserver" in window) {
+    const observador = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (entrada.isIntersecting) {
+          entrada.target.classList.add("visible");
+          observador.unobserve(entrada.target);
+        }
+      });
+    }, {
+      threshold: 0.15
+    });
+
+    fotos.forEach((foto) => observador.observe(foto));
+  } else {
+    fotos.forEach((foto) => foto.classList.add("visible"));
+  }
+});
 
 </script>
 </body>
