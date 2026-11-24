@@ -608,6 +608,14 @@ section img.foto-animada.visible {
     </div>
     <p class="conc">Con mucho cariño</p>
     <p class="script papas">Dante Galaviz<br>y<br>Debanhi Losoya</p>
+    <button type="button" class="baja" id="bajaFinal" aria-label="Volver al inicio">
+  <svg viewBox="0 0 34 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 3l14 14L31 3"/>
+  </svg>
+  <svg viewBox="0 0 34 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 3l14 14L31 3"/>
+  </svg>
+</button>
   </section>
 </main>
 
@@ -698,6 +706,13 @@ const sel = document.getElementById("n");
 sel.add(new Option("Elige cantidad", ""));
 sel.options[0].disabled = true; sel.options[0].selected = true;
 for (let i = 1; i <= CONFIG.maxPersonas; i++) sel.add(new Option(i + (i === 1 ? " persona" : " personas"), i));
+/* ---------- Flechas regresan al inicio ---------- */
+document.getElementById("bajaFinal").addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
 
 /* ---------- Galería de una sola fotografía: no requiere carrusel ---------- */
 /* ---------- Sobre + música ---------- */
