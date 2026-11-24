@@ -287,12 +287,25 @@ input,select,button,textarea{font-variant-numeric:inherit;font-feature-settings:
 .rsvp select{
   background:var(--oro);
   color:#06308a;
-  border:1.5px solid #b18b20;
+  border:2px solid #d4af37 !important;
+  outline: none;
+  box-shadow:0 0 8px #d4af3766;
   font-size:1.15rem;
   border-radius:8px;
   padding:13px;
   width:100%;
   font-family:'Cormorant Garamond',Georgia,serif;
+  -webkit-tap-highlight-color:transparent;
+  appearance:none;
+  -webkit-appearance:none;
+}
+
+.rsvp select:focus,
+.rsvp select:active{
+  border:2px solid #d4af37 !important;
+  outline:2px solid #d4af37 !important;
+  outline-offset:1px;
+  box-shadow:0 0 12px #d4af3799 !important;
 }
 .rsvp input[type=text]{
   background:#fff;
