@@ -570,7 +570,7 @@ const CONFIG = {
   fechaEvento: "2026-12-26T17:00:00",   // fecha y hora para la cuenta regresiva (hora local, 24 h)
   volverSeg: 5,               // segundos al llegar al final para regresar solo al inicio (0 = desactivado)
   maxPersonas: 2,            // máximo de personas que pueden elegir
-  usarWhatsapp: false,         // true = también abre WhatsApp con la respuesta
+  usarWhatsapp: true,         // true = también abre WhatsApp con la respuesta
   fotos: ["fotos/foto1.jpg","fotos/foto2.jpg"],
   // Sobre con imagen realista (si no existe el archivo, se usa el sobre dibujado).
   // x, y = posición del centro del sello en % (desde la izquierda y desde arriba); t = tamaño del sello en % del ancho
@@ -704,30 +704,61 @@ btnM.addEventListener("click", () => {
 });
 
 /* ---------- Confirmación ---------- */
+
 function enviar(asiste) {
   const familia = "Familia Martínez Salas";
-  if (asiste && !sel.value) { alert("Elige cuántas personas asistirán"); sel.focus(); return; }
+
+  if (asiste && !sel.value) {
+    alert("Elige cuántas personas asistirán");
+    sel.focus();
+    return;
+  }
+
   const personas = asiste ? parseInt(sel.value) : 0;
   const nota = "";
-  const datos = { familia, asiste: asiste ? "Sí" : "No", personas, mensaje: nota };
+
+  const datos = {
+    familia,
+    asiste: asiste ? "Sí" : "No",
+    personas,
+    mensaje: nota
+  };
 
   if (CONFIG.sheetsURL) {
-    fetch(CONFIG.sheetsURL, { method: "POST", mode: "no-cors", body: JSON.stringify(datos) }).catch(() => {});
+    fetch(CONFIG.sheetsURL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(datos)
+    }).catch(() => {});
   }
-  document.getElementById("form").style.display = "none";
-  const ok = document.getElementById("ok");
-  ok.style.display = "block";
-  ok.textContent = asiste ? "¡Gracias por confirmar, te esperamos!" : "Gracias por avisarnos, te llevamos en el corazón.";
 
   if (CONFIG.usarWhatsapp) {
     const txt = asiste
-      ? `Hola, somos ${familia} y confirmamos nuestra asistencia a los XV de Zury Debanhi: ${personas} personas.${nota ? " Nota: " + nota : ""}`
+      ? `Hola, somos ${familia} y confirmamos nuestra asistencia a los XV de Zury Debanhi: ${personas} personas.`
       : `Hola, somos ${familia} y lamentablemente no podremos asistir a los XV de Zury Debanhi.`;
-    setTimeout(() => window.open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(txt), "_blank"), 600);
+
+    const url = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(txt);
+
+    window.open(url, "_blank");
   }
+
+  document.getElementById("form").style.display = "none";
+
+  const ok = document.getElementById("ok");
+  ok.style.display = "block";
+
+  ok.textContent = asiste
+    ? "¡Gracias por confirmar, te esperamos!"
+    : "Gracias por avisarnos, te llevamos en el corazón.";
 }
-document.getElementById("form").addEventListener("submit", e => { e.preventDefault(); enviar(true); });
+
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  enviar(true);
+});
+
 document.getElementById("bNo").addEventListener("click", () => enviar(false));
+
 </script>
 </body>
 </html>
