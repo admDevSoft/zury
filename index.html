@@ -374,7 +374,54 @@ section img.foto-animada.visible {
     transition: none;
   }
 }
+/* ===== LUCECITAS EN SECCIONES DE FONDO CLARO ===== */
 
+.claro,
+.fam,
+.rsvp {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.claro::before,
+.fam::before,
+.rsvp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(circle at 10% 15%, #d4af37 0 2px, transparent 3px),
+    radial-gradient(circle at 85% 12%, #0b59f1 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 25% 35%, #d4af37 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 42%, #0b59f1 0 2px, transparent 3px),
+    radial-gradient(circle at 8% 65%, #d4af37 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 75% 72%, #d4af37 0 2px, transparent 3px),
+    radial-gradient(circle at 40% 90%, #0b59f1 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 95% 90%, #d4af37 0 2px, transparent 3px);
+
+  opacity: .32;
+  animation: lucesClaras 4s ease-in-out infinite alternate;
+}
+
+.claro > *,
+.fam > *,
+.rsvp > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes lucesClaras {
+  0% {
+    opacity: .18;
+  }
+  100% {
+    opacity: .55;
+  }
+}
 
 </style>
 <script>function fb(i){var l=(i.dataset.alt||"").split("|").filter(Boolean),n=l.shift();if(n){i.dataset.alt=l.join("|");i.src=n}else{i.onerror=null;(i.closest(".fotoBox")||i).style.display="none"}}</script>
