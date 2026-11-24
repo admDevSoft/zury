@@ -376,11 +376,28 @@ section img.foto-animada.visible {
 }
 
 #bajaFinal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 25px auto 0;
+  margin: 16px auto 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--oro-cl);
+  display: grid;
+  place-items: center;
+  padding: 6px 18px;
   width: fit-content;
+}
+
+#bajaFinal svg {
+  width: 36px;
+  height: 21px;
+  display: block;
+  filter: drop-shadow(0 2px 6px #000a);
+  animation: bajar 1.6s ease-in-out infinite;
+}
+
+#bajaFinal svg + svg {
+  margin-top: -9px;
+  animation-delay: .25s;
 }
 
 </style>
