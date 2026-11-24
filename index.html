@@ -354,20 +354,20 @@ section img.foto-animada.visible {
   transform: scale(1) translateY(0);
 }
 
-/* ZOOM SUAVE: SE ACERCA Y REGRESA */
+/* ZOOM SUAVE: SE ACERCA Y REGRESA SOLO 2 VECES */
 .fotoBox img.visible,
 .fotoS img.visible,
 section img.foto-animada.visible {
-  animation: zoomSuave 6s ease-in-out 1s infinite;
+  animation: zoomSuave 5s ease-in-out 1s 2;
 }
 
 @keyframes zoomSuave {
   0%, 100% {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 
   50% {
-    transform: scale(1.10);
+    transform: scale(1.10) translateY(0);
   }
 }
 
