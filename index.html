@@ -375,57 +375,6 @@ section img.foto-animada.visible {
   }
 }
 
-/* ===== LUCECITAS DORADAS EN SECCIONES CLARAS ===== */
-
-.claro,
-.fam,
-.rsvp {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.claro::before,
-.fam::before,
-.rsvp::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-
-  background:
-    radial-gradient(circle at 10% 15%, #d4af37 0 3px, transparent 4px),
-    radial-gradient(circle at 85% 12%, #f3dc8a 0 2.5px, transparent 3.5px),
-    radial-gradient(circle at 25% 35%, #d4af37 0 3px, transparent 4px),
-    radial-gradient(circle at 92% 42%, #f3dc8a 0 3px, transparent 4px),
-    radial-gradient(circle at 8% 65%, #d4af37 0 2.5px, transparent 3.5px),
-    radial-gradient(circle at 75% 72%, #f3dc8a 0 3px, transparent 4px),
-    radial-gradient(circle at 40% 90%, #d4af37 0 2.5px, transparent 3.5px),
-    radial-gradient(circle at 95% 90%, #f3dc8a 0 3px, transparent 4px),
-    radial-gradient(circle at 55% 20%, #d4af37 0 2px, transparent 3px),
-    radial-gradient(circle at 18% 82%, #f3dc8a 0 2.5px, transparent 3.5px);
-
-  opacity: .75;
-  filter: drop-shadow(0 0 4px #d4af37);
-  animation: lucesClaras 2.8s ease-in-out infinite alternate;
-}
-
-.claro > *,
-.fam > *,
-.rsvp > * {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes lucesClaras {
-  0% {
-    opacity: .45;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 
 
 </style>
