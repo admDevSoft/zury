@@ -239,6 +239,79 @@ input,select,button,textarea{font-variant-numeric:inherit;font-feature-settings:
 .claro .marco p{color:var(--azul-osc)}
 .portada .xv{position:relative}
 
+
+/* ===== CONFIRMACION DE ASISTENCIA ===== */
+
+.rsvp{
+  background:var(--crema);
+  padding:65px 20px;
+}
+
+.rsvp-card{
+  max-width:480px;
+  margin:0 auto;
+  padding:32px 22px;
+  background:linear-gradient(145deg,#f5f8ff,#e7efff);
+  border:1px solid #d4af37;
+  border-radius:18px;
+  box-shadow:0 8px 25px #06308a20;
+}
+
+.rsvp .honor{
+  font-family:'Pinyon Script','Brush Script MT',cursive;
+  font-size:2.8rem;
+  font-style:normal;
+  line-height:1.2;
+  color:var(--azul);
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.rsvp .familia-invitada{
+  color:var(--azul-osc);
+  font-size:1.45rem;
+  font-weight:600;
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.rsvp label{
+  color:var(--azul-osc);
+  font-weight:600;
+}
+
+.rsvp select,
+.rsvp input[type=text]{
+  background:#fff;
+  color:var(--azul-osc);
+  border:1px solid #c9a227;
+}
+
+.rsvp .btn{
+  width:100%;
+  text-align:center;
+  margin-top:8px;
+  color:var(--azul-osc);
+  border-color:#c9a227;
+}
+
+.rsvp .btn.solido{
+  background:var(--azul);
+  color:#fff;
+  border-color:var(--azul);
+}
+
+.rsvp .btn:hover{
+  background:var(--oro);
+  color:#2b2000;
+}
+
+.rsvp .ok{
+  text-align:center;
+  color:var(--azul);
+  margin-top:20px;
+}  
+
 </style>
 <script>function fb(i){var l=(i.dataset.alt||"").split("|").filter(Boolean),n=l.shift();if(n){i.dataset.alt=l.join("|");i.src=n}else{i.onerror=null;(i.closest(".fotoBox")||i).style.display="none"}}</script>
 </head>
@@ -411,27 +484,51 @@ input,select,button,textarea{font-variant-numeric:inherit;font-feature-settings:
     </div>
   </section>
 
-  <!-- CONFIRMAR -->
-  <section class="rsvp" id="confirmar">
-    <p class="honor">Será un honor contar con tu presencia</p>
-    <h2 class="script">Confirmar asistencia</h2>
+<!-- CONFIRMAR ASISTENCIA -->
+<section class="rsvp" id="confirmar">
+
+  <div class="rsvp-card">
+
+    <p class="honor">
+      Será un honor contar con tu presencia
+    </p>
+
+    <!-- DATOS DE LA FAMILIA INVITADA -->
+    <p class="familia-invitada">
+      Familia Martínez Salas<br>
+      <small>2 personas</small>
+    </p>
+
     <form id="form">
+
       <div>
-        <label for="fam">Nombre de tu familia</label>
-        <input id="fam" type="text" maxlength="60" placeholder="Ej. Familia Rodríguez" autocomplete="off">
-      </div>
-      <div>
-        <label for="n">Personas que asistirán</label>
+        <label for="n">Personas que asistirán:</label>
         <select id="n"></select>
       </div>
+
       <div class="opts">
-        <button type="submit" class="btn solido" id="bConf">Confirmar asistencia</button>
-        <button type="button" class="btn" id="bNo">No podremos asistir</button>
+        <button type="submit" class="btn solido" id="bConf">
+          Confirmar asistencia
+        </button>
+
+        <button type="button" class="btn" id="bNo">
+          No podremos asistir
+        </button>
       </div>
+
     </form>
-    <p class="ok script" id="ok">¡Gracias por confirmar!</p>
-    <p class="limite">Favor de confirmar antes del 5 de diciembre de 2026</p>
-  </section>
+
+    <p class="ok script" id="ok">
+      ¡Gracias por confirmar!
+    </p>
+
+    <p class="limite">
+      Favor de confirmar antes del 5 de diciembre de 2026
+    </p>
+
+  </div>
+
+</section>
 
   <!-- CIERRE -->
   <section class="cierre">
@@ -458,7 +555,7 @@ const CONFIG = {
   sheetsURL: "",              // URL de Google Apps Script (déjalo vacío para usar solo WhatsApp)
   fechaEvento: "2026-12-26T17:00:00",   // fecha y hora para la cuenta regresiva (hora local, 24 h)
   volverSeg: 5,               // segundos al llegar al final para regresar solo al inicio (0 = desactivado)
-  maxPersonas: 10,            // máximo de personas que pueden elegir
+  maxPersonas: 2,            // máximo de personas que pueden elegir
   usarWhatsapp: false,         // true = también abre WhatsApp con la respuesta
   fotos: ["fotos/foto1.jpg","fotos/foto2.jpg"],
   // Sobre con imagen realista (si no existe el archivo, se usa el sobre dibujado).
@@ -594,9 +691,7 @@ btnM.addEventListener("click", () => {
 
 /* ---------- Confirmación ---------- */
 function enviar(asiste) {
-  const famEl = document.getElementById("fam");
-  const familia = famEl.value.trim();
-  if (!familia) { alert("Escribe el nombre de tu familia"); famEl.focus(); return; }
+  const familia = "Familia Martínez Salas";
   if (asiste && !sel.value) { alert("Elige cuántas personas asistirán"); sel.focus(); return; }
   const personas = asiste ? parseInt(sel.value) : 0;
   const nota = "";
