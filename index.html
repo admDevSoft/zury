@@ -874,7 +874,7 @@ cargarInvitado()
 
     const ok = document.getElementById("ok");
     ok.style.display = "block";
-    ok.textContent = "No pudimos validar esta invitación. Verifica tu enlace.";
+   ok.textContent = "Error: " + error.message;
 
   });
   
