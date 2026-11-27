@@ -1461,26 +1461,35 @@
     const audio = document.getElementById("audio");
     const btnM = document.getElementById("musica");
 
-    function abrirInvitacion() {
+function abrirInvitacion() {
 
-      intro.classList.add("abriendo");
+  intro.classList.add("abriendo");
 
-      audio.volume = 0.7;
-      audio.play().catch(() => { });
+  audio.volume = 0.7;
+  audio.play().catch(() => { });
 
-      setTimeout(() => {
+  const fuentesListas = document.fonts
+    ? Promise.all([
+        document.fonts.load('400 3.9rem "Pinyon Script"'),
+        document.fonts.load('400 3.8rem "Pinyon Script"')
+      ]).catch(() => {})
+    : Promise.resolve();
 
-        intro.classList.add("fuera");
+  setTimeout(async () => {
 
-        document.getElementById("inv").classList.add("ver");
+    await fuentesListas;
 
-        btnM.style.display = "block";
+    intro.classList.add("fuera");
 
-        window.scrollTo(0, 0);
+    document.getElementById("inv").classList.add("ver");
 
-      }, 2200);
+    btnM.style.display = "block";
 
-    }
+    window.scrollTo(0, 0);
+
+  }, 2200);
+
+}
 
     selloF.addEventListener("click", abrirInvitacion);
 
