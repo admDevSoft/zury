@@ -688,7 +688,7 @@ section img.foto-animada.visible {
    ========================================================== */
 const CONFIG = {
   whatsapp: "528134584818",   // tu número con 52 y sin espacios ni +
-  sheetsURL: "",              // URL de Google Apps Script (déjalo vacío para usar solo WhatsApp)
+  sheetsURL: "https://script.google.com/macros/s/AKfycbzJZ_KpJTfJJ-hNVcFHJpj3kGQ0mVtCKt4QAzc7Da8rliSXJb1MCn0Q-KH3rreucWLh/exec",              // URL de Google Apps Script 
   fechaEvento: "2026-12-26T17:00:00",   // fecha y hora para la cuenta regresiva (hora local, 24 h)
   volverSeg: 5,               // segundos al llegar al final para regresar solo al inicio (0 = desactivado)
   maxPersonas: 2,            // máximo de personas que pueden elegir
@@ -702,6 +702,52 @@ const CONFIG = {
   }
 };
 
+/* ---------- Cargar datos de la familia invitada ---------- */
+
+const params = new URLSearchParams(window.location.search);
+const codigoInvitado = params.get("invitado");
+
+let invitado = null;
+
+function cargarInvitado() {
+  return new Promise((resolve, reject) => {
+
+    if (!codigoInvitado || !CONFIG.sheetsURL ||
+        CONFIG.sheetsURL.includes("PEGA_AQUI")) {
+      reject(new Error("Enlace incompleto"));
+      return;
+    }
+
+    const callback = "recibirInvitado";
+
+    window[callback] = function(data) {
+      delete window[callback];
+      script.remove();
+
+      if (!data || !data.encontrado) {
+        reject(new Error("Invitado no encontrado"));
+        return;
+      }
+
+      invitado = data;
+      resolve(data);
+    };
+
+    const script = document.createElement("script");
+
+    script.src = CONFIG.sheetsURL +
+      "?invitado=" + encodeURIComponent(codigoInvitado) +
+      "&callback=" + callback;
+
+    script.onerror = () => {
+      delete window[callback];
+      reject(new Error("No se pudo conectar con la invitación"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+  
 /* ---------- Volver al inicio solo, al llegar al final ---------- */
 (function () {
   const alFinal = () => window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 6;
@@ -765,10 +811,73 @@ document.documentElement.classList.add("js");
 })();
 
 /* ---------- Selector de personas ---------- */
+/* ---------- Selector de personas ---------- */
+
 const sel = document.getElementById("n");
-sel.add(new Option("Elige cantidad", ""));
-sel.options[0].disabled = true; sel.options[0].selected = true;
-for (let i = 1; i <= CONFIG.maxPersonas; i++) sel.add(new Option(i + (i === 1 ? " persona" : " personas"), i));
+
+sel.disabled = true;
+
+document.getElementById("bConf").disabled = true;
+document.getElementById("bNo").disabled = true;
+
+function prepararSelector(maxPersonas) {
+
+  sel.innerHTML = "";
+
+  sel.add(new Option("Elige cantidad", ""));
+  sel.options[0].disabled = true;
+  sel.options[0].selected = true;
+
+  for (let i = 1; i <= maxPersonas; i++) {
+    sel.add(
+      new Option(
+        i + (i === 1 ? " persona" : " personas"),
+        i
+      )
+    );
+  }
+
+  sel.disabled = false;
+}
+
+/* ---------- Mostrar datos de la familia ---------- */
+
+cargarInvitado()
+  .then(data => {
+
+    const familiaEl = document.querySelector(".familia-invitada");
+
+    familiaEl.replaceChildren();
+
+    familiaEl.appendChild(
+      document.createTextNode(data.familia)
+    );
+
+    familiaEl.appendChild(document.createElement("br"));
+
+    const lugares = document.createElement("small");
+
+    lugares.textContent = data.personas +
+      (data.personas === 1 ? " persona" : " personas");
+
+    familiaEl.appendChild(lugares);
+
+    prepararSelector(data.personas);
+
+    document.getElementById("bConf").disabled = false;
+    document.getElementById("bNo").disabled = false;
+
+  })
+  .catch(error => {
+
+    document.getElementById("form").style.display = "none";
+
+    const ok = document.getElementById("ok");
+    ok.style.display = "block";
+    ok.textContent = "No pudimos validar esta invitación. Verifica tu enlace.";
+
+  });
+  
 /* ---------- Flechas regresan al inicio ---------- */
 document.getElementById("bajaFinal").addEventListener("click", () => {
   window.scrollTo({
@@ -835,7 +944,13 @@ btnM.addEventListener("click", () => {
 /* ---------- Confirmación ---------- */
 
 function enviar(asiste) {
-  const familia = "Familia Martínez Salas";
+
+  if (!invitado) {
+    alert("Espera un momento mientras validamos tu invitación.");
+    return;
+  }
+
+  const familia = invitado.familia;
 
   if (asiste && !sel.value) {
     alert("Elige cuántas personas asistirán");
@@ -846,20 +961,7 @@ function enviar(asiste) {
   const personas = asiste ? parseInt(sel.value) : 0;
   const nota = "";
 
-  const datos = {
-    familia,
-    asiste: asiste ? "Sí" : "No",
-    personas,
-    mensaje: nota
-  };
-
-  if (CONFIG.sheetsURL) {
-    fetch(CONFIG.sheetsURL, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(datos)
-    }).catch(() => {});
-  }
+ 
 
   if (CONFIG.usarWhatsapp) {
     const txt = asiste
