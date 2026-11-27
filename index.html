@@ -937,11 +937,28 @@
       font-size: .9rem;
       opacity: .7;
     }
+   /* ============ APARICIÓN SUAVE DE LOS TEXTOS ============ */
+
+.js .padres .alegria {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 1.2s ease,
+    transform 1.2s ease;
+}
+
+.js .padres .alegria.texto-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
     /* ============ ACCESIBILIDAD ============ */
 
     @media(prefers-reduced-motion:reduce) {
-
+ .js .padres .alegria {
+  opacity: 1;
+  transform: none;
+}
       *,
       *::before,
       *::after {
@@ -1838,7 +1855,40 @@ function abrirInvitacion() {
       });
 
     })();
+/* ============ ANIMACIÓN DE LOS PÁRRAFOS ============ */
 
+(function () {
+
+  const textos = document.querySelectorAll(".padres .alegria");
+
+  if (!("IntersectionObserver" in window)) {
+    textos.forEach(texto => {
+      texto.classList.add("texto-visible");
+    });
+    return;
+  }
+
+  const observador = new IntersectionObserver(entradas => {
+
+    entradas.forEach(entrada => {
+
+      if (entrada.isIntersecting) {
+
+        entrada.target.classList.add("texto-visible");
+
+        observador.unobserve(entrada.target);
+
+      }
+
+    });
+
+  }, { threshold: 0.25 });
+
+  textos.forEach(texto => {
+    observador.observe(texto);
+  });
+
+})();
 
     /* ==========================================================
        PROTECCIÓN BÁSICA DE FOTOGRAFÍAS
